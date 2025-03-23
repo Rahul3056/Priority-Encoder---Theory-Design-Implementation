@@ -1,0 +1,37 @@
+### **Example Verilog Code for 4-to-2 Priority Encoder**  
+
+```verilog
+// 4-to-2 Priority Encoder Module
+module priority_encoder_4to2 (
+    input wire [3:0] I,  // 4 input lines
+    output wire [1:0] Y, // 2-bit encoded output
+    output wire V        // Valid output indicator
+);
+    assign Y[1] = I[3] | I[2];
+    assign Y[0] = I[3] | (~I[2] & I[1]);
+    assign V = I[3] | I[2] | I[1] | I[0];
+endmodule
+
+// Testbench
+module testbench;
+    reg [3:0] I;
+    wire [1:0] Y;
+    wire V;
+
+    priority_encoder_4to2 pe (.I(I), .Y(Y), .V(V));
+
+    initial begin
+        $monitor("I = %b | Y = %b | V = %b", I, Y, V);
+        
+        I = 4'b0000; #10;
+        I = 4'b0001; #10;
+        I = 4'b0010; #10;
+        I = 4'b0100; #10;
+        I = 4'b1000; #10;
+        I = 4'b1100; #10;
+        I = 4'b1010; #10;
+
+        $finish;
+    end
+endmodule
+```
